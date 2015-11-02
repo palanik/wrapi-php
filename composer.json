@@ -1,0 +1,30 @@
+{
+    "name": "palanik/wrapi",
+    "description": "Wrapper for calling Restful API",
+    "type": "library",
+    "keywords": [
+        "Restful",
+        "API",
+        "wrapper",
+        "functions",
+        "api",
+        "function",
+        "guzzle"
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/palanik/wrapi-php",
+    "authors": [
+        {
+            "name": "palanik"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "guzzlehttp/guzzle": ">=6.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "wrapi\\": "src/"
+        }
+    }
+}
