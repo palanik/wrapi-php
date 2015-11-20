@@ -8,6 +8,11 @@ class wrapi {
         $this->opts = $opts;
     }
 
+    public function register($action, $endpoint) {
+        $this->endpoints[$action] = $endpoint;
+        return $this;
+    }
+
     // arguments order - param1, param2, ..., querystring?, body?, callback 
     public function __call($name, $args) {
         if (!array_key_exists($name, $this->endpoints)) {
@@ -45,7 +50,7 @@ class wrapi {
         );
 
         $client = new \GuzzleHttp\Client();
-        $opts = $array = array_merge(array(), $this->opts);
+        $opts = array_merge(array(), $this->opts);
         
         // Add Query strings
         if (isset($querystring)) {
