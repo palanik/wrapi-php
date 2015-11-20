@@ -16,7 +16,7 @@ $resp = $client->zen();
 echo "Today's Zen advice: '". $resp. "'\n\n";
 
 
-// Print Highest Contributor to guzzle repo.
+// Print all Contributors to guzzle repo.
 $resp = $client->contributors('guzzle', 'guzzle');
 
 echo "Contributions to guzzle/guzzle\n";
