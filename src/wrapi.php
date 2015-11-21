@@ -2,10 +2,15 @@
 namespace wrapi;
 
 class wrapi {
-    public function __construct($baseURL, array $endpoints = array(), array $opts = array()) {
+    public function __construct($baseURL, 
+        array $endpoints = array(), 
+        array $opts = array(), 
+        array $guzzleOpts = array()) {
+
         $this->baseURL = $baseURL;
         $this->endpoints = $endpoints;
         $this->opts = $opts;
+        $this->guzzleOpts = $guzzleOpts;
     }
 
     public function register($action, $endpoint) {
@@ -49,7 +54,6 @@ class wrapi {
             $this->baseURL . $apiEndpoint['path']
         );
 
-        $client = new \GuzzleHttp\Client();
         $opts = array_merge(array(), $this->opts);
         
         // Add Query strings
@@ -77,6 +81,7 @@ class wrapi {
         }
 
         // Request & Response
+        $client = new \GuzzleHttp\Client($this->guzzleOpts);
         try {
             $response = $client->request($apiEndpoint['method'], 
                 $url,
