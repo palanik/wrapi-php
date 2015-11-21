@@ -1,4 +1,5 @@
 <?php
+
 namespace wrapi;
 
 class wrapi {
@@ -51,7 +52,7 @@ class wrapi {
             function($m) use (&$args) {
                 return array_shift($args);
             }, 
-            $this->baseURL . $apiEndpoint['path']
+            \Sabre\Uri\resolve($this->baseURL, $apiEndpoint['path'])
         );
 
         $opts = array_merge(array(), $this->opts);

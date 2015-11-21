@@ -20,7 +20,8 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "guzzlehttp/guzzle": ">=6.1.0"
+        "guzzlehttp/guzzle": ">=6.1.0",
+        "sabre/uri": "^1.0"
     },
     "require-dev": {
         "internations/http-mock": "0.7.0"
