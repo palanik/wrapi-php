@@ -29,8 +29,10 @@ echo "\n\n";
 echo "Popular PHP repos this week on github.com\n";
 echo "-----------------------------------------\n";
 
+date_default_timezone_set("America/New_York");
+$lastWeek = date('Y-m-d', strtotime("-1 week"));
 $qs = array(
-    "q" => "created:>2015-10-25 language:php",
+    "q" => 'created:>'. $lastWeek. ' language:php',
     "sort" => urlencode("stars"),
     "order" => urlencode("desc")
     );

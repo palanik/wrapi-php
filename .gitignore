@@ -4,3 +4,4 @@ composer.lock
 composer-test.lock
 vendor/
 .DS_STORE
+*.sh
