@@ -73,7 +73,7 @@ class wrapi {
 
         // Add body
         if (isset($body)) {
-            if (is_array($body) && array_keys($body) === range(0, count($body) - 1)) {
+            if (is_array($body) && array_keys($body) !== range(0, count($body) - 1)) {
                 $opts['json'] = $body;
             }
             else {
