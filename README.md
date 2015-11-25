@@ -2,7 +2,11 @@ wrapi
 =====
 Wrapper for calling Restful API
 
-*`wrapi`* allows you to make calls to HTTP based APIs like ordinary php functions.
+*`wrapi`* allows you to call HTTP based APIs just like making calls to ordinary php functions.
+
+[![Latest Stable Version](https://poser.pugx.org/palanik/wrapi/v/stable.svg)](https://packagist.org/packages/palanik/wrapi)
+[![Build Status](https://travis-ci.org/palanik/wrapi-php.svg)](https://travis-ci.org/palanik/wrapi-php)
+[![License](https://poser.pugx.org/palanik/wrapi/license.svg)](https://github.com/palanik/wrapi-php/blob/master/LICENSE)
 
 ## Installation
 

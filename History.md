@@ -1,3 +1,9 @@
+0.1.1 / 2015-11-25
+==================
+
+  * Test Cases
+  * Resolving relative path using `sabre/uri`
+
 0.1.0 / 2015-11-20
 ==================
 
