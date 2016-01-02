@@ -16,7 +16,7 @@ class wrapi {
         $this->endpoints = new NestedDeco();
 
         foreach ($endpoints as $key => $value) {
-            $this->register($key, $value);
+            call_user_func($this, $key, $value);
         }
     }
 
@@ -111,12 +111,14 @@ class wrapi {
         };
     }
 
-    public function register($action, $endpoint) {
+    public function __invoke($action, $endpoint) {
         $pathArray = explode('.', $action);
+        /*
         if ($pathArray[0] === "register") {
             throw new \RuntimeException('"register" is a reserved function name for wrapi. Please use an alias (eg. "Register", "_register").');
             return;
         }
+        */
 
         $last = array_pop($pathArray);
         $tail = array_reduce($pathArray, 
