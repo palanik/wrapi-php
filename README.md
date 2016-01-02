@@ -29,7 +29,7 @@ composer require palanik/wrapi
 ## Easy Start
 
 ### Approach `I`
-1. Create an [array](#endpoints-array) listing all the endpoints of the API you want to work with.
+1. Create an [array](#endpoints-array) listing all the API endpoints you want to work with.
 2. [Wrap](#wrap-endpoints) endpoints with *`wrapi`*.
 3. Call individual endpoints as [functions](#make-the-call).
 
@@ -102,7 +102,7 @@ $client = new wrapi\wrapi('https://api.github.com/',	// base url for the API
 Register additional API endpoints with the client object with a function name.
 
 ```php
-$client->register("zen", 
+$client("zen", 
 	array(
 		"method" => "GET",
 		"path" => "zen"
@@ -134,25 +134,27 @@ The *`wrapi`* object conveniently provides the client interface to the API. Crea
 The constructor takes the following arguments:
 
 1. `baseURL` - The base url for the API. eg. `https://api.github.com/repos/guzzle/guzzle/contributors`
-2. `endpoints` - The array listing the endpoints of the API. Provide an empty array or a partial list and `register` endpoints later.
+2. `endpoints` - The array listing the endpoints of the API. Provide an empty array or a partial list and register endpoints later.
 3. `options` - Optional parameter. *`wrapi`* uses [Guzzle](http://docs.guzzlephp.org/) module to connect to API server. The `options` parameter is the same [`options`](http://docs.guzzlephp.org/en/latest/request-options.html) parameter used in `Guzzle``request`.
 
 ### Register function
 
 Add endpoints to client object.
 ```php
-$client->register(function_name, endpoint_definition)
+$client(function_name, endpoint_definition)
 ```
 
-1. `function_name` - Alias for the endpoint, also the function name to call.
+1. `function_name` - Alias for the endpoint, also the name of the function to call.
 2. `endpoint_definition` - Array defining the endpoint.
 
 
 ### Function calls
 
-Call the API via the function in the client object.  Arguments to the function depends on the API declaration in the endpoints array. Provide the arguments in the following order:
+Call the API via the function in the client object.  Arguments to the function depend on the API declaration in the endpoints array. 
 
-1. params in the path of the endpoint. eg. `$client->contributors('guzzle', 'guzzle',   // guzzle (owner) & guzzle (repo) are path params`
+Provide the arguments in the following order:
+
+1. named `params` in the url path of the endpoint. eg. `$client->contributors('guzzle', 'guzzle')   // guzzle (owner) & guzzle (repo) are path params`
 2. `querystring` as an associative array with name-value pairs. eg. `$client->contributors(array("since" => 364)  // querystring ?since=364`
 3. `body` - JSON content for  `POST` or `PUT` methods. Skip this argument if not required. 
 
