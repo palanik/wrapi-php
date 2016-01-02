@@ -8,12 +8,14 @@ class wrapiRestRegisterTest extends \PHPUnit_Framework_TestCase {
     public static function setUpBeforeClass() {
         static::setUpHttpMockBeforeClass('8082', 'localhost');
 
-        self::$client = new wrapi\wrapi('http://localhost:8082/v1/');
-        self::$client->register("list", array("method" => "GET", "path" => "books"));
-        self::$client->register("item", array("method" => "GET", "path" => "books/:id"));
-        self::$client->register("create", array("method" => "POST", "path" => "books"));
-        self::$client->register("update", array("method" => "PUT", "path" => "books/:id"));
-        self::$client->register("remove", array("method" => "DELETE", "path" => "books/:id"));
+        $client = new wrapi\wrapi('http://localhost:8082/v1/');
+        $client("list", array("method" => "GET", "path" => "books"));
+        $client("item", array("method" => "GET", "path" => "books/:id"));
+        $client("create", array("method" => "POST", "path" => "books"));
+        $client("update", array("method" => "PUT", "path" => "books/:id"));
+        $client("remove", array("method" => "DELETE", "path" => "books/:id"));
+
+        self::$client = $client;
     }
 
     public static function tearDownAfterClass() {

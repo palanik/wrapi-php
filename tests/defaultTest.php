@@ -22,9 +22,11 @@ class wrapiDefaultTest extends \PHPUnit_Framework_TestCase {
 
 		$handler = HandlerStack::create($mock);
 
-        self::$client = new wrapi\wrapi('http://api.a2zbooks.local/v1/', [], [], ['handler' => $handler]);
-        self::$client->register("list", array("method" => "GET", "path" => "books"));
-        self::$client->register("item", array("method" => "GET", "path" => "books/:id"));
+        $client = new wrapi\wrapi('http://api.a2zbooks.local/v1/', [], [], ['handler' => $handler]);
+        $client("list", array("method" => "GET", "path" => "books"));
+        $client("item", array("method" => "GET", "path" => "books/:id"));
+
+        self::$client = $client;
     }
     public static function tearDownAfterClass() {
     }
