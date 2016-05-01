@@ -1,6 +1,6 @@
 <?php
 
-class wrapiQueryStringsTest extends \PHPUnit_Framework_TestCase {
+class wrapiQueryTest extends \PHPUnit_Framework_TestCase {
     use \InterNations\Component\HttpMock\PHPUnit\HttpMockTrait;
 
     protected static $client;
@@ -9,9 +9,19 @@ class wrapiQueryStringsTest extends \PHPUnit_Framework_TestCase {
         static::setUpHttpMockBeforeClass('8082', 'localhost');
         $endPoints = json_decode(' 
           {
-            "books" : {
+            "books.author" : {
               "method" : "GET",
-              "path": "books"
+              "path": "books",
+              "query": {
+                "type": "author"
+              }
+            },
+            "books.genre" : {
+              "method" : "GET",
+              "path": "books",
+              "query": {
+                "type": "genre"
+              }
             }
           }', true);
 
@@ -35,7 +45,7 @@ class wrapiQueryStringsTest extends \PHPUnit_Framework_TestCase {
         $this->http->mock
             ->when()
                 ->methodIs('GET')
-                ->pathIs('/v1/books?author=Homer')
+                ->pathIs('/v1/books?type=author&q=Homer')
             ->then()
                 ->body(json_encode([
                         array("id" => 1, "name" => "Odyssey", "author" => "Homer"),
@@ -46,7 +56,7 @@ class wrapiQueryStringsTest extends \PHPUnit_Framework_TestCase {
             ->end();
         $this->http->setUp();
 
-        $response = self::$client->books(array("author" => 'Homer'));
+        $response = self::$client->books->author(array("q" => 'Homer'));
         $this->assertNotNull($response);
         $this->assertEquals([
                 array("id" => 1, "name" => "Odyssey", "author" => "Homer"),
@@ -55,24 +65,46 @@ class wrapiQueryStringsTest extends \PHPUnit_Framework_TestCase {
                 json_decode($response, true));
     }
 
-    public function testByAuthorTitle() {
+    public function testByGenre() {
         $this->http->mock
             ->when()
                 ->methodIs('GET')
-                ->pathIs('/v1/books?author=Homer&title=Iliad')
+                ->pathIs('/v1/books?type=genre&q=sci-fi')
             ->then()
                 ->body(json_encode([
-                        array("id" => 2, "name" => "Iliad", "author" => "Homer")
+                        array("id" => 4, "name" => "The Time Machine")
                     ])
                 )
                 ->statusCode(200)
             ->end();
         $this->http->setUp();
 
-        $response = self::$client->books(array("author" => 'Homer', "title" => 'Iliad'));
+        $response = self::$client->books->genre(array("q" => 'sci-fi'));
         $this->assertNotNull($response);
         $this->assertEquals([
-                array("id" => 2, "name" => "Iliad", "author" => "Homer")
+                array("id" => 4, "name" => "The Time Machine")
+                ],
+                json_decode($response, true));
+    }
+
+    public function testByAuthorOverride() {
+        $this->http->mock
+            ->when()
+                ->methodIs('GET')
+                ->pathIs('/v1/books?type=genre&q=sci-fi')
+            ->then()
+                ->body(json_encode([
+                        array("id" => 4, "name" => "The Time Machine")
+                    ])
+                )
+                ->statusCode(200)
+            ->end();
+        $this->http->setUp();
+
+        $response = self::$client->books->author(array("type" => 'genre', "q" => 'sci-fi'));
+        $this->assertNotNull($response);
+        $this->assertEquals([
+                array("id" => 4, "name" => "The Time Machine")
                 ],
                 json_decode($response, true));
     }

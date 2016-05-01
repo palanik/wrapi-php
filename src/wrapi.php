@@ -42,6 +42,15 @@ class wrapi {
                 unset($querystring);
             }
 
+            // If query specified with the endpoint use it ...
+            if (array_key_exists('query', $apiEndpoint)) {
+                if (!isset($querystring)) {
+                    $querystring = array();
+                }
+                // ... override with query from call
+                $querystring = array_merge($apiEndpoint['query'], $querystring);
+            }
+
             // rest in args are params
             $url = preg_replace_callback("/(:[a-zA-Z_][a-zA-Z0-9_]*)/", 
                 function($m) use (&$args) {
@@ -98,6 +107,14 @@ class wrapi {
                 }
                 else {
                     return $respBody;
+                }
+            }
+            catch (RequestException $re) {
+                if (isset($cb)) {
+                    $cb($e);
+                }
+                else {
+                    throw $e;
                 }
             }
             catch (Exception $e) {
