@@ -50,7 +50,7 @@ Declare each endpoint as per the following specifications.
 ```php
 "function_name" => array(
 	"method" => "HTTP_METHOD",					// 'GET', 'POST', 'PUT', 'PATCH' or 'DELETE'
-	"path": "relative/path/to/:api/endpoint"	// Can use `Slim`/`express` style path params
+	"path" => "relative/path/to/:api/endpoint"	// Can use `Slim`/`express` style path params
 )
 ```
 
@@ -126,6 +126,12 @@ echo "Today's quote: ". $zenQuote;
 ## API
 
 *`wrapi`* is an open ended framework and is not restricted any one or a set of public APIs. All APIs providing HTTP interface to access the endpoints can be wrapped by *`wrapi`* so that you can quickly build your client application.
+
+### Endpoint definition
+
+* `method` - Any one of the HTTP [methods](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html)
+* `path` - route path to API Endpoint. Supports `express` style [path params](http://expressjs.com/en/4x/api.html#req.params)
+* `query` - an associative array with name-value pairs. This is optional. Useful where resources are identified via query string parameters
 
 ### Client object
 
