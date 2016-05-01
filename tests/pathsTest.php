@@ -24,6 +24,10 @@ class wrapiPathsTest extends \PHPUnit_Framework_TestCase {
             "pathParam": {
               "method": "GET",
               "path": "path/:to/endpoint"
+            },
+            "empty": {
+              "method": "GET",
+              "path": ""
             }
           }', true);
 
@@ -91,5 +95,20 @@ class wrapiPathsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("relative/path/to/endpoint", $response);
     }
 
+    public function testemptyPath() {
+        $this->http->mock
+            ->when()
+                ->methodIs('GET')
+                ->pathIs('/v1/')
+            ->then()
+                ->body("empty")
+                ->statusCode(200)
+            ->end();
+        $this->http->setUp();
+
+        $response = self::$client->empty();
+        $this->assertNotNull($response);
+        $this->assertEquals("empty", $response);
+    }
 
 }
