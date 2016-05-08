@@ -24,7 +24,7 @@ class wrapiDefaultTest extends \PHPUnit_Framework_TestCase {
 
         $client = new wrapi\wrapi('http://api.a2zbooks.local/v1/', [], [], ['handler' => $handler]);
         $client("list", array("method" => "GET", "path" => "books"));
-        $client("item", array("method" => "GET", "path" => "books/:id"));
+        $client("item", array("path" => "books/:id"));  // Use Default method
 
         self::$client = $client;
     }

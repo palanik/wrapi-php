@@ -1,6 +1,6 @@
 <?php
 
-class wrapiPathsTest extends \PHPUnit_Framework_TestCase {
+class wrapiUrlOverrideTest extends \PHPUnit_Framework_TestCase {
     use \InterNations\Component\HttpMock\PHPUnit\HttpMockTrait;
 
     protected static $client;
@@ -11,38 +11,27 @@ class wrapiPathsTest extends \PHPUnit_Framework_TestCase {
           {
             "simple": {
               "method": "GET",
-              "path": "simple"
+              "url": "http://localhost:8082/v1/simple"
             },
             "fullPath": {
               "method": "GET",
-              "path": "path/to/endpoint"
+              "url": "http://localhost:8082/v1/path/to/endpoint"
             },
             "relativePath": {
               "method": "GET",
-              "path": "../v1/relative/path/to/endpoint"
-            },
-            "emptyPath": {
-              "method": "GET",
-              "path": ""
+              "url": "http://localhost:8082/v1/../v1/relative/path/to/endpoint"
             },
             "pathParam": {
               "method": "GET",
-              "path": "path/:to/endpoint"
+              "url": "http://localhost:8082/v1/path/:to/endpoint"
             },
-            "pathParamAndQuery": {
+            "empty": {
               "method": "GET",
-              "path": "path/:three/endpoint"
-            },
-            "pathParamPlusQuery": {
-              "method": "GET",
-              "path": "path/:four/endpoint",
-              "query": {
-                "q": "bye"
-              }
+              "url": "http://localhost:8082/v1/"
             }
           }', true);
 
-        self::$client = new wrapi\wrapi('http://localhost:8082/v1/', 
+        self::$client = new wrapi\wrapi('http://invalidhost:8082/v1/', 
             $endPoints, []);
     }
 
@@ -117,56 +106,9 @@ class wrapiPathsTest extends \PHPUnit_Framework_TestCase {
             ->end();
         $this->http->setUp();
 
-        $response = self::$client->emptyPath();
+        $response = self::$client->empty();
         $this->assertNotNull($response);
         $this->assertEquals("empty", $response);
     }
 
-    public function testparamPath() {
-        $this->http->mock
-            ->when()
-                ->methodIs('GET')
-                ->pathIs('/v1/path/2/endpoint')
-            ->then()
-                ->body("path/2/endpoint")
-                ->statusCode(200)
-            ->end();
-        $this->http->setUp();
-
-        $response = self::$client->pathParam(2);
-        $this->assertNotNull($response);
-        $this->assertEquals("path/2/endpoint", $response);
-    }
-
-    public function testparamAndQueryPath() {
-        $this->http->mock
-            ->when()
-                ->methodIs('GET')
-                ->pathIs('/v1/path/3/endpoint?q=hello')
-            ->then()
-                ->body("path/3/endpoint")
-                ->statusCode(200)
-            ->end();
-        $this->http->setUp();
-
-        $response = self::$client->pathParamAndQuery(3, array("q" => "hello"));
-        $this->assertNotNull($response);
-        $this->assertEquals("path/3/endpoint", $response);
-    }
-
-    public function testparamPlusQueryPath() {
-        $this->http->mock
-            ->when()
-                ->methodIs('GET')
-                ->pathIs('/v1/path/4/endpoint?q=bye')
-            ->then()
-                ->body("path/4/endpoint")
-                ->statusCode(200)
-            ->end();
-        $this->http->setUp();
-
-        $response = self::$client->pathParamPlusQuery(4);
-        $this->assertNotNull($response);
-        $this->assertEquals("path/4/endpoint", $response);
-    }
 }
