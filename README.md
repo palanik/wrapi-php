@@ -129,9 +129,12 @@ echo "Today's quote: ". $zenQuote;
 
 ### Endpoint definition
 
+`method` & `path`/`url` are required.
+
 * `method` - Any one of the HTTP [methods](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html)
 * `path` - route path to API Endpoint. Supports `express` style [path params](http://expressjs.com/en/4x/api.html#req.params)
 * `query` - an associative array with name-value pairs. This is optional. Useful where resources are identified via query string parameters
+* `url` - fully qualified uri string to override. Useful when api calls connect to a different endpoints
 
 ### Client object
 

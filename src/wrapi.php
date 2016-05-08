@@ -31,7 +31,8 @@ class wrapi {
             }
 
             // Content body
-            if (in_array($apiEndpoint['method'], ['PATCH', 'POST', 'PUT'])) {
+            if (array_key_exists('method', $apiEndpoint) && 
+                in_array($apiEndpoint['method'], ['PATCH', 'POST', 'PUT'])) {
                 $body = array_pop($args);
             }
 
@@ -51,12 +52,22 @@ class wrapi {
                 $querystring = array_merge($apiEndpoint['query'], $querystring);
             }
 
+            // If baseUrl specified with the endpoint use it ...
+            $baseUrl = $this->baseURL;
+            $route = array_key_exists('path', $apiEndpoint) ? $apiEndpoint['path'] : '';
+            if (array_key_exists('url', $apiEndpoint)) {
+                $urlObj = \Sabre\Uri\parse($apiEndpoint['url']);
+                $route = $urlObj['path'];
+                $urlObj['path'] = null;
+                $baseUrl = \Sabre\Uri\build($urlObj);
+            }
+
             // rest in args are params
             $url = preg_replace_callback("/(:[a-zA-Z_][a-zA-Z0-9_]*)/", 
                 function($m) use (&$args) {
                     return array_shift($args);
                 }, 
-                \Sabre\Uri\resolve($this->baseURL, $apiEndpoint['path'])
+                \Sabre\Uri\resolve($baseUrl, $route)
             );
 
             $opts = array_merge(array(), $this->opts);
@@ -85,10 +96,15 @@ class wrapi {
                 }
             }
 
+            $method = "GET";
+            if (array_key_exists('method', $apiEndpoint)) {
+                $method = $apiEndpoint['method'];
+            }
+
             // Request & Response
             $client = new \GuzzleHttp\Client($this->guzzleOpts);
             try {
-                $response = $client->request($apiEndpoint['method'], 
+                $response = $client->request($method, 
                     $url,
                     $opts
                 );
