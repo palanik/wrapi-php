@@ -4,9 +4,11 @@ namespace wrapi;
 
 class NestedDeco {
   protected $obj;
+    protected $func;
 
   function __construct() {
     $this->obj = new \stdClass();
+      $this->func = new \stdClass();
   }
 
   public function __set($name, $val) {
@@ -23,12 +25,18 @@ class NestedDeco {
   }
   
   public function __call($name, $args) {
-    if (property_exists($this->obj, $name) && is_callable($this->obj->$name)) {
+      if(is_callable($this->func->$name)){
+          return call_user_func_array($this->func->$name, $args);
+      }
+      throw new \RuntimeException('No such registered method. : '. $name);
+      return;
+      
+/*    if (property_exists($this->obj, $name) && is_callable($this->obj->$name)) {
         return call_user_func_array($this->obj->$name, $args);
     }
 
     throw new \RuntimeException('No such registered method. : '. $name);
-    return;
+    return;*/
   }
 
     public function setMethod($name, $func){
