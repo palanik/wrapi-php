@@ -30,4 +30,8 @@ class NestedDeco {
     throw new \RuntimeException('No such registered method. : '. $name);
     return;
   }
+
+    public function setMethod($name, $func){
+        $this->func->$name = $func;
+    }
 }
