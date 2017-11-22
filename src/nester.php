@@ -30,13 +30,6 @@ class NestedDeco {
       }
       throw new \RuntimeException('No such registered method. : '. $name);
       return;
-      
-/*    if (property_exists($this->obj, $name) && is_callable($this->obj->$name)) {
-        return call_user_func_array($this->obj->$name, $args);
-    }
-
-    throw new \RuntimeException('No such registered method. : '. $name);
-    return;*/
   }
 
     public function setMethod($name, $func){
