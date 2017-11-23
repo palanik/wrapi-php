@@ -22,7 +22,7 @@
         "exclude": [".git", ".gitignore", "travis.yml", "/tests", "phpunit.xml.dist"]
     },
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=5.5.0",
         "guzzlehttp/guzzle": ">=6.1.0",
         "sabre/uri": "^1.0"
     },
