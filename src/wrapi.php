@@ -5,9 +5,9 @@ namespace wrapi;
 require __DIR__ . '/nester.php';
 
 class wrapi {
-    public function __construct($baseURL, 
-        array $endpoints = array(), 
-        array $opts = array(), 
+    public function __construct($baseURL,
+        array $endpoints = array(),
+        array $opts = array(),
         array $guzzleOpts = array()) {
 
         $this->baseURL = $baseURL;
@@ -31,7 +31,7 @@ class wrapi {
             }
 
             // Content body
-            if (array_key_exists('method', $apiEndpoint) && 
+            if (array_key_exists('method', $apiEndpoint) &&
                 in_array($apiEndpoint['method'], ['PATCH', 'POST', 'PUT'])) {
                 $body = array_pop($args);
             }
@@ -63,15 +63,15 @@ class wrapi {
             }
 
             // rest in args are params
-            $url = preg_replace_callback("/(:[a-zA-Z_][a-zA-Z0-9_]*)/", 
+            $url = preg_replace_callback("/(:[a-zA-Z_][a-zA-Z0-9_]*)/",
                 function($m) use (&$args) {
                     return array_shift($args);
-                }, 
+                },
                 \Sabre\Uri\resolve($baseUrl, $route)
             );
 
             $opts = array_merge(array(), $this->opts);
-            
+
             // Add Query strings
             if (isset($querystring)) {
                 if(!array_key_exists('query', $opts)) {
@@ -104,7 +104,7 @@ class wrapi {
             // Request & Response
             $client = new \GuzzleHttp\Client($this->guzzleOpts);
             try {
-                $response = $client->request($method, 
+                $response = $client->request($method,
                     $url,
                     $opts
                 );
@@ -148,21 +148,20 @@ class wrapi {
         $pathArray = explode('.', $action);
 
         $last = array_pop($pathArray);
-        $tail = array_reduce($pathArray, 
+        $tail = array_reduce($pathArray,
             function(&$acc, $a) {
                 if (!$acc->$a) {
                     $acc->$a = new NestedDeco();
                 }
                 else if (is_callable($acc->$a)) {
-                  throw new \RuntimeException('Property ' + $a + ' already registered as function path.');
+                  throw new \RuntimeException('Property \'' . $a . '\' already registered as function path.');
                 }
                 return $acc->$a;
             },
             $this->endpoints
         );
 
-//        $tail->$last = $this->api($endpoint);
-        $tail->setMethod($last, $this->api($endpoint));
+        $tail->$last = $this->api($endpoint);
 
         return $this;
     }
@@ -170,9 +169,9 @@ class wrapi {
   public function __get($name) {
     return $this->endpoints->$name;
   }
-  
+
   public function __call($name, $args) {
-    return call_user_func_array($this->endpoints->$name, $args);
+    return call_user_func_array(array($this->endpoints, $name), $args);
   }
 }
 

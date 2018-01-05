@@ -7,11 +7,19 @@ class wrapiNestedArrayTest extends \PHPUnit_Framework_TestCase {
 
     public static function setUpBeforeClass() {
         static::setUpHttpMockBeforeClass('8082', 'localhost');
-        $endPoints = json_decode(' 
+        $endPoints = json_decode('
           {
+            "books" : {
+              "method" : "GET",
+              "path": "books"
+            },
             "books.list" : {
               "method" : "GET",
               "path": "books"
+            },
+            "books.item": {
+              "method" : "GET",
+              "path": "books/:id"
             },
             "books.item.get": {
               "method" : "GET",
@@ -31,7 +39,7 @@ class wrapiNestedArrayTest extends \PHPUnit_Framework_TestCase {
             }
           }', true);
 
-        self::$client = new wrapi\wrapi('http://localhost:8082/v1/', 
+        self::$client = new wrapi\wrapi('http://localhost:8082/v1/',
             $endPoints, []);
     }
 
@@ -45,6 +53,31 @@ class wrapiNestedArrayTest extends \PHPUnit_Framework_TestCase {
 
     public function tearDown() {
         $this->tearDownHttpMock();
+    }
+
+    public function testBooksRequest() {
+        $this->http->mock
+            ->when()
+                ->methodIs('GET')
+                ->pathIs('/v1/books')
+            ->then()
+                ->body(json_encode([             // list
+                    array("id" => 1, "name" => "The Martian"),
+                    array("id" => 2, "name" => "The Odyssey")
+                    ])
+                )
+                ->statusCode(200)
+            ->end();
+        $this->http->setUp();
+
+        $response = self::$client->books();
+        $this->assertNotNull($response);
+        $this->assertEquals([
+                array("id" => 1, "name" => "The Martian"),
+                array("id" => 2, "name" => "The Odyssey")
+                ],
+                json_decode($response, true));
+
     }
 
     public function testListRequest() {
@@ -69,10 +102,31 @@ class wrapiNestedArrayTest extends \PHPUnit_Framework_TestCase {
                 array("id" => 2, "name" => "The Odyssey")
                 ],
                 json_decode($response, true));
+
     }
 
 
     public function testItemRequest() {
+        $this->http->mock
+            ->when()
+                ->methodIs('GET')
+                ->pathIs('/v1/books/2')
+            ->then()
+                ->body(json_encode(
+                    array("id" => 2, "name" => "The Odyssey")
+                    )
+                )
+                ->statusCode(200)
+            ->end();
+        $this->http->setUp();
+
+        $response = self::$client->books->item(2);
+        $this->assertNotNull($response);
+        $this->assertEquals(array("id" => 2, "name" => "The Odyssey"),
+                json_decode($response, true));
+    }
+
+    public function testItemGetRequest() {
         $this->http->mock
             ->when()
                 ->methodIs('GET')
@@ -91,7 +145,6 @@ class wrapiNestedArrayTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(array("id" => 2, "name" => "The Odyssey"),
                 json_decode($response, true));
     }
-
 
     public function testCreateRequest() {
         $this->http->mock
