@@ -161,7 +161,8 @@ class wrapi {
             $this->endpoints
         );
 
-        $tail->$last = $this->api($endpoint);
+//        $tail->$last = $this->api($endpoint);
+        $tail->setMethod($last, $this->api($endpoint));
 
         return $this;
     }
