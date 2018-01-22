@@ -1,3 +1,13 @@
+0.1.7 / 2018-01-21
+==================
+  * url override in endpoints configuration - `url`
+  * Nested methods on root method (🙏 @kuredev)
+
+0.1.6 / 2016-05-01
+==================
+  * Query strings in endpoints configuration - `query`
+  * PHP 7.0
+
 0.1.5 / 2015-02-15
 ==================
   * Magic method `__invoke()` replaces `register()`
